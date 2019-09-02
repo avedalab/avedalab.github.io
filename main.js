@@ -21,14 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         var defaultBounds = new google.maps.LatLngBounds(
-            new google.maps.LatLng(10.2833322, 123.8907089),
+            new google.maps.LatLng(10.1833322, 123.7907089),
             new google.maps.LatLng(10.31672, 123.8999964)
         );
 
         var options = {
             bounds: defaultBounds
         };
-        
+
         var searchBox = new google.maps.places.SearchBox(searhField);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(searhField);
         var autocomplete = new google.maps.places.Autocomplete(searhField, options);
