@@ -6,17 +6,29 @@
   width: 100%;
   z-index: 1;
 }
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
   position: relative;
 }
 
-#searhField { 
+#searchBox {
   display: block;
   position: absolute;
-  width : 600px;
+  top: 100px;
+  left: 20px;
+  height: 200px;
+  width: 500px;
+  z-index: 3;
+  background-color: white;
+}
+
+#searhField {
+  display: block;
+  position: absolute;
+  width: 600px;
   height: 35px;
   z-index: 2;
   margin-top: 10px;
