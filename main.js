@@ -1,7 +1,9 @@
 let map;
 let markers = [];
+let currentLocation = { lat: 10.31672, lng: 123.89271 };
 let restaurants = [
   {
+    id: 1,
     title: "Ricos Lechon",
     coords: { lat: 10.318487004786979, lng: 123.89610528945923 },
     menu: "PriChon, Camaro Rebosado, Crispy Feetchon",
@@ -11,6 +13,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 2,
     title: "Zubuchon",
     coords: { lat: 10.317558135101828, lng: 123.89408826828003 },
     menu: "Zubuchon Sisig, Bangus Sisig, Chorizo Lumpia",
@@ -20,6 +23,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 3,
     title: "Yaksi Barbeque",
     coords: { lat: 10.31506706195805, lng: 123.88988256454468 },
     menu: "Pork Barbeque, Chicken Leg, Tuna Belly",
@@ -29,6 +33,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 4,
     title: "Planet Vegis",
     coords: { lat: 10.318233676962913, lng: 123.8866639137268 },
     menu: "BBQ, Chili Cheese Rocket, Chicharon Bean Curd",
@@ -38,6 +43,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 5,
     title: "Ice Giants",
     coords: { lat: 10.315214838033565, lng: 123.8909125328064 },
     menu: "Ice giants, Mexican tostada, Mango giants",
@@ -47,6 +53,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 6,
     title: "Jollibee",
     coords: { lat: 10.31544705744066, lng: 123.8852047920227 },
     menu: "Yum burger, Jolly Hotdog, Tuna Pie",
@@ -56,6 +63,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 7,
     title: "Coffee Notes Caffe",
     coords: { lat: 10.315594833337782, lng: 123.89466762542725 },
     menu: "Choco Fraup, Coffee",
@@ -65,6 +73,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 8,
     title: "House of Lechon",
     coords: { lat: 10.317748131396826, lng: 123.90170574188232 },
     menu: "Lechon Sisig, Lechon paksiw, barn-iBisaya",
@@ -74,6 +83,7 @@ let restaurants = [
     display: 1
   },
   {
+    id: 9,
     title: "The Pig and Palm",
     coords: { lat: 10.312892634541782, lng: 123.90449523925781 },
     menu: "Roasted parrot fish, Confit pork belly, Beer battered Fish and chips",
@@ -89,12 +99,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.head.appendChild(sc);
   var opt = document.getElementsByClassName("restaurant");
 
+  var dir = document.getElementsByClassName("containerDir");
+
   for (var i = 0; i < opt.length; i++) {
     opt[i].addEventListener('click', displayCheck);
   }
+  
+  for (var i = 0; i < dir.length; i++) {
+    dir[i].addEventListener('click', gotoDirection);
+  }
 
   sc.addEventListener("load", () => {
-    
     
     map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: 10.31672, lng: 123.89271 },
@@ -105,13 +120,39 @@ document.addEventListener("DOMContentLoaded", () => {
     // loadSearch();
     drawCircle();
 
+    // get current location
+    // getCurrentLocation();
+
     deleteMarkers();
 
     // pin all restaurants
     showMarkers();
-
-    
   });
+
+  function gotoDirection()
+  {
+    const directionsDisplay = new google.maps.DirectionsRenderer();
+    const directsService = new google.maps.DirectionsService();
+    const lat = parseFloat(this.dataset.lat);
+    const lng = parseFloat(this.dataset.lng);
+
+    var home = new google.maps.LatLng(currentLocation);
+    var destination = new google.maps.LatLng({lat: lat, lng: lng});
+
+    var request = {
+      origin: home,
+      destination: destination,
+      travelMode: 'DRIVING'
+    };
+    // console.log(this.dataset.lat);
+
+    // directsService.route(request, function(result, status) {
+    //   console.log(result);
+    //   if (status === 'OK') {
+    //     directionsDisplay.setDirections(result);
+    //   }
+    // });
+  }
 
   function displayCheck()
   {
@@ -137,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // draw circle
   function drawCircle()
   {
-    // circle block
     // First, create an object containing LatLng and population for each city.
     var circlemap = {
       cebu: {
@@ -177,12 +217,16 @@ document.addEventListener("DOMContentLoaded", () => {
     restaurants.forEach(function(el){
       if (el.display === 1) {
         addmarker(
+          el.id,
           el.title,
           el.coords,
           el.menu,
           el.type,
           el.no
         );
+        document.getElementById("dir_"+el.id).style.visibility= 'visible';
+      } else {
+        document.getElementById("dir_"+el.id).style.visibility= 'hidden';
       }
     });
   }
@@ -193,9 +237,8 @@ document.addEventListener("DOMContentLoaded", () => {
     markers = [];
   }
 
-
   // function to add marker
-  function addmarker(title, coords, menu, type, no) {
+  function addmarker(id, title, coords, menu, type, no) {
     var contentString =
       '<div id="content">' +
       '<div id="siteNotice">' +
@@ -203,14 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
       '<h1 id="firstHeading" class="firstHeading">' +
       title +
       "</h1>" +
-      '<div id="bodyContent">' +
+      '<div id="bodyContent_'+id+'">' +
       "<p><b>Type: </b>" +
       type +
       "</p>" +
       "<p> <b>Menu: </b>" +
       menu +
       "</p>" +
-      "<p> <b>Customer Visited: </b>" +
+      "<p> <b>No. Of Customer Visits: </b>" +
       no +
       "</p>" +
       "</div>" +
@@ -230,7 +273,16 @@ document.addEventListener("DOMContentLoaded", () => {
       infowindow.open(map, marker);
     });
 
+    // document.getElementById("btn_"+id).addEventListener('click', getDirection);
+
     markers.push(marker);
+  }
+
+  function getCurrentLocation()
+  {
+    navigator.geolocation.getCurrentPosition(function(position){
+      currentLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+    });
   }
 
   function clicker()
