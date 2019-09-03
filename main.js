@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     drawCircle();
 
     // get current location
-    // getCurrentLocation();
+    getCurrentLocation();
 
     deleteMarkers();
 
@@ -146,12 +146,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     // console.log(this.dataset.lat);
 
-    // directsService.route(request, function(result, status) {
-    //   console.log(result);
-    //   if (status === 'OK') {
-    //     directionsDisplay.setDirections(result);
-    //   }
-    // });
+    directsService.route(request, function(result, status) {
+      console.log(result);
+      if (status === 'OK') {
+        directionsDisplay.setDirections(result);
+      }
+    });
   }
 
   function displayCheck()
@@ -282,6 +282,15 @@ document.addEventListener("DOMContentLoaded", () => {
   {
     navigator.geolocation.getCurrentPosition(function(position){
       currentLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+      console.log(position);
+      addmarker(
+        10,
+        "Home",
+        currentLocation,
+        "",
+        "",
+        0
+      );
     });
   }
 
