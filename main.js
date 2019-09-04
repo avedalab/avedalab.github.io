@@ -1,6 +1,8 @@
 let map;
 let markers = [];
 let currentLocation = { lat: 10.31672, lng: 123.89271 };
+let directionsDisplay;
+let directsService;
 let restaurants = [
   {
     id: 1,
@@ -111,11 +113,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   sc.addEventListener("load", () => {
     
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    directsService = new google.maps.DirectionsService();
+
     map = new google.maps.Map(document.getElementById("map"), {
       center: { lat: 10.31672, lng: 123.89271 },
-      zoom: 16
+      zoom: 15
     });
     
+    directionsDisplay.setMap(map);
     // clicker();
     // loadSearch();
     drawCircle();
@@ -131,8 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function gotoDirection()
   {
-    const directionsDisplay = new google.maps.DirectionsRenderer();
-    const directsService = new google.maps.DirectionsService();
+    
     const lat = parseFloat(this.dataset.lat);
     const lng = parseFloat(this.dataset.lng);
 
@@ -283,14 +288,14 @@ document.addEventListener("DOMContentLoaded", () => {
     navigator.geolocation.getCurrentPosition(function(position){
       currentLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
       console.log(position);
-      addmarker(
-        10,
-        "Home",
-        currentLocation,
-        "",
-        "",
-        0
-      );
+      // addmarker(
+      //   10,
+      //   "Home",
+      //   currentLocation,
+      //   "",
+      //   "",
+      //   0
+      // );
     });
   }
 
