@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
   {
     navigator.geolocation.getCurrentPosition(function(position){
       currentLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
-      console.log(position);
+      // console.log(position);
       // addmarker(
       //   10,
       //   "Home",
